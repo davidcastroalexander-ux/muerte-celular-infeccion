@@ -1175,102 +1175,178 @@ elif nivel == "Nivel 7 · Patógeno → respuesta celular":
 .top{display:flex;justify-content:space-between;align-items:center;gap:12px}.title{font-size:24px;font-weight:800}
 .score{background:#fff;border:1px solid #ddd;border-radius:12px;padding:10px 14px;font-weight:800}
 .instructions{background:#eef5ff;border-left:5px solid #2563eb;padding:12px 14px;border-radius:12px;margin:14px 0}
-.layout{display:grid;grid-template-columns:330px 1fr;gap:16px}.panel{background:#fff;border:1px solid #d9dee5;border-radius:16px;padding:16px}
+.note{background:#fff8e6;border-left:5px solid #f59f00;padding:11px 14px;border-radius:12px;margin-bottom:14px}
+.layout{display:grid;grid-template-columns:350px 1fr;gap:16px}.panel{background:#fff;border:1px solid #d9dee5;border-radius:16px;padding:16px}
 .card{border:2px solid #64748b;background:#f8fafc;border-radius:12px;padding:10px;margin:8px 0;font-weight:800;text-align:center;cursor:grab}
-.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.col{border:1px solid #d5dce3;border-radius:16px;padding:12px;min-height:490px}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.col{border:1px solid #d5dce3;border-radius:16px;padding:12px;min-height:570px}
 .col h3{text-align:center;margin-top:0}.apop{background:#eef6ff}.pyro{background:#fff4e6}.onco{background:#fff0f3}.auto{background:#eefbf5}
-.slot{min-height:68px;border:2px dashed #98a5b3;border-radius:12px;background:#ffffffd9;display:flex;align-items:center;justify-content:center;text-align:center;padding:8px;margin:8px 0;font-weight:700}
+.slot{min-height:72px;border:2px dashed #98a5b3;border-radius:12px;background:#ffffffd9;display:flex;align-items:center;justify-content:center;text-align:center;padding:8px;margin:8px 0;font-weight:700}
 .correct{border:2px solid #2f9e44!important;background:#e9f8ec!important}.wrong{border:2px solid #d9485f!important;background:#fff0f2!important}
 .feedback,.question,.summary{margin-top:14px;padding:14px;border-radius:12px;border:1px solid #d9dee5;background:#fff}
 .success{color:#237a35;font-weight:800}.error{color:#c92a2a;font-weight:800}.hint{color:#4d5964}
 button{border:0;border-radius:10px;padding:10px 14px;font-weight:800;cursor:pointer;margin-top:9px;margin-right:7px}.primary{background:#263b5e;color:#fff}.secondary{background:#6c757d;color:#fff}
 .option{display:block;width:100%;text-align:left;background:#f3f6f9;color:#17212b}.good{background:#e9f8ec!important}.bad{background:#fff0f2!important}
 .badge{font-size:12px;font-weight:800;border-radius:999px;padding:3px 8px;background:#e2e8f0;display:inline-block;margin-top:4px}
-.case{border-top:1px solid #e5e7eb;padding-top:12px;margin-top:12px}
 @media(max-width:1100px){.layout{grid-template-columns:1fr}.grid{grid-template-columns:1fr 1fr}}@media(max-width:700px){.grid{grid-template-columns:1fr}}
 </style></head><body><div class="wrap">
-<div class="top"><div class="title">Nivel 7 · El patógeno cambia el desenlace</div><div class="score">Puntaje: <span id="score">0</span>/1200</div></div>
-<div class="instructions"><b>Misión final:</b> clasifica cada escenario según la respuesta celular documentada. Atención: un mismo patógeno puede aparecer más de una vez porque las modalidades no son mutuamente excluyentes y dependen del contexto.</div>
+
+<div class="top">
+  <div class="title">Nivel 7 · Patógeno → respuesta celular</div>
+  <div class="score">Puntaje: <span id="score">0</span>/1600</div>
+</div>
+
+<div class="instructions">
+  <b>Misión final:</b> clasifica 16 escenarios infecciosos. Hay <b>4 escenarios por cada desenlace</b>.
+  El orden dentro de cada columna no importa.
+</div>
+
+<div class="note">
+  <b>Precisión científica:</b> la cuarta columna roja se denomina
+  <b>“Oncosis / muerte lítica caspasa-independiente”</b> porque el artículo no documenta
+  cuatro microorganismos diferentes como oncosis clásica. Incluye fenómenos caspasa-independientes
+  u oncóticos relacionados, claramente identificados por su contexto experimental.
+</div>
+
 <div class="layout">
 <div class="panel"><h3>🦠 Escenarios infecciosos</h3><div id="piecebox"></div></div>
 <div class="panel">
 <div class="grid">
+
 <div class="col apop"><h3>🔵 Apoptosis</h3>
-<div class="slot" data-answer="S. pneumoniae · apoptosis"></div>
-<div class="slot" data-answer="M. tuberculosis/BCG · apoptosis"></div>
-<div class="slot" data-answer="Yersinia · apoptosis"></div>
-</div>
-<div class="col pyro"><h3>🟠 Piroptosis</h3>
-<div class="slot" data-answer="Shigella · piroptosis"></div>
-<div class="slot" data-answer="Salmonella · piroptosis"></div>
-<div class="slot" data-answer="Listeria · piroptosis"></div>
-</div>
-<div class="col onco"><h3>🔴 Oncosis</h3>
-<div class="slot" data-answer="M. tuberculosis virulenta · oncosis"></div>
-<div class="slot" data-answer="Carga bacteriana alta · muerte caspasa-independiente"></div>
-</div>
-<div class="col auto"><h3>🟢 Autofagia</h3>
-<div class="slot" data-answer="M. tuberculosis · autofagia"></div>
-<div class="slot" data-answer="T. gondii · autofagia"></div>
-<div class="slot" data-answer="GAS · autofagia"></div>
-<div class="slot" data-answer="Poliovirus/Rhinovirus · autofagia"></div>
-</div>
+<div class="slot" data-category="apoptosis"></div>
+<div class="slot" data-category="apoptosis"></div>
+<div class="slot" data-category="apoptosis"></div>
+<div class="slot" data-category="apoptosis"></div>
 </div>
 
-<div class="feedback" id="feedback"><b>Retroalimentación</b><br><span class="hint">Usa el microorganismo, la célula/contexto y el desenlace descrito; no clasifiques solo por Gram o por tipo de patógeno.</span></div>
-<button class="primary" onclick="checkLevel()">Comprobar nivel</button><button class="secondary" onclick="location.reload()">Reiniciar</button>
+<div class="col pyro"><h3>🟠 Piroptosis</h3>
+<div class="slot" data-category="piroptosis"></div>
+<div class="slot" data-category="piroptosis"></div>
+<div class="slot" data-category="piroptosis"></div>
+<div class="slot" data-category="piroptosis"></div>
+</div>
+
+<div class="col onco"><h3>🔴 Oncosis / muerte lítica caspasa-independiente</h3>
+<div class="slot" data-category="oncosis"></div>
+<div class="slot" data-category="oncosis"></div>
+<div class="slot" data-category="oncosis"></div>
+<div class="slot" data-category="oncosis"></div>
+</div>
+
+<div class="col auto"><h3>🟢 Autofagia</h3>
+<div class="slot" data-category="autofagia"></div>
+<div class="slot" data-category="autofagia"></div>
+<div class="slot" data-category="autofagia"></div>
+<div class="slot" data-category="autofagia"></div>
+</div>
+
+</div>
+
+<div class="feedback" id="feedback">
+<b>Retroalimentación</b><br>
+<span class="hint">Clasifica por la modalidad documentada para ese contexto; un mismo patógeno puede activar más de una respuesta.</span>
+</div>
+
+<button class="primary" onclick="checkLevel()">Comprobar nivel</button>
+<button class="secondary" onclick="location.reload()">Reiniciar</button>
 
 <div class="question" id="challenge" style="display:none">
-<b>Desafío 1 · ¿Quién se beneficia?</b>
-<div class="case"><b><i>Streptococcus pneumoniae</i> + apoptosis de macrófagos:</b>
-<button class="option" onclick="ans(this,true,'a1')">Favorece el aclaramiento del patógeno</button>
-<button class="option" onclick="ans(this,false,'a1')">Favorece necesariamente la supervivencia bacteriana</button><div id="a1"></div></div>
-
-<div class="case"><b>Poliovirus/rinovirus + maquinaria autofágica:</b>
-<button class="option" onclick="ans(this,true,'a2')">Puede favorecer la supervivencia/replicación del patógeno</button>
-<button class="option" onclick="ans(this,false,'a2')">Siempre produce aclaramiento viral</button><div id="a2"></div></div>
-
-<div class="case"><b><i>M. tuberculosis</i> + autofagia:</b>
-<button class="option" onclick="ans(this,true,'a3')">Puede superar el bloqueo de maduración fagolisosomal y favorecer degradación bacteriana</button>
-<button class="option" onclick="ans(this,false,'a3')">Impide siempre la degradación bacteriana</button><div id="a3"></div></div>
+<b>Desafío final</b><br>
+¿Por qué un mismo patógeno puede aparecer en más de una columna?
+<button class="option" onclick="answer(this,'contexto')">Porque el tipo de respuesta depende de la célula infectada, la carga, los factores de virulencia y las vías activadas o inhibidas.</button>
+<button class="option" onclick="answer(this,'taxonomia')">Porque la tinción de Gram determina directamente la modalidad de muerte.</button>
+<button class="option" onclick="answer(this,'unica')">No debería aparecer; cada microorganismo induce una única modalidad.</button>
+<div id="cf"></div>
 </div>
 
-<div class="question" id="finalcase" style="display:none">
-<b>Desafío 2 · Pensamiento integrador</b><br>
-Un macrófago contiene una elevada carga de <i>M. tuberculosis</i>. ¿Cuál es la conclusión más rigurosa?
-<button class="option" onclick="finalAns(this,'contexto')">El tipo de muerte puede cambiar con la carga del patógeno; a MOI alta se ha descrito muerte caspasa-independiente.</button>
-<button class="option" onclick="finalAns(this,'una')"><i>M. tuberculosis</i> siempre produce únicamente apoptosis.</button>
-<button class="option" onclick="finalAns(this,'gram')">Ser ácido-alcohol resistente determina por sí solo el tipo de muerte celular.</button>
-<div id="fc"></div>
+<div class="summary">
+<b>Mensaje integrador:</b> la asociación se refiere al <b>escenario experimental descrito</b>, no a una propiedad taxonómica fija del microorganismo.
 </div>
-
-<div class="summary"><b>Regla final del curso:</b> no memorices “un patógeno = una muerte”. La respuesta depende de la naturaleza del microorganismo, la carga, el sitio/célula infectada y las vías que el patógeno active o inhiba.</div>
 </div></div></div>
 
 <script>
 const cards=[
-{name:"S. pneumoniae · apoptosis",label:"🟣 Gram (+) · S. pneumoniae",info:"El material describe apoptosis de macrófagos alveolares como protectora y asociada con eliminación del patógeno."},
-{name:"M. tuberculosis/BCG · apoptosis",label:"🟤 Micobacteria · M. tuberculosis / BCG",info:"La tabla del artículo vincula apoptosis en este contexto con aclaramiento del patógeno."},
-{name:"Yersinia · apoptosis",label:"🔴 Gram (−) · Yersinia",info:"El artículo documenta apoptosis asociada a inhibición de señales NF-κB/MAPK en un contexto que puede favorecer supervivencia del patógeno."},
-{name:"Shigella · piroptosis",label:"🔴 Gram (−) · Shigella",info:"Shigella induce principalmente muerte dependiente de caspasa-1, diferenciada de apoptosis."},
-{name:"Salmonella · piroptosis",label:"🔴 Gram (−) · Salmonella",info:"En macrófagos se describe muerte rápida dependiente de caspasa-1, sin activación de caspasas ejecutoras 3, 6 o 7."},
-{name:"Listeria · piroptosis",label:"🟣 Gram (+) · Listeria monocytogenes",info:"La tabla del artículo incluye piroptosis y reconocimiento asociado al inflamasoma, con efecto de aclaramiento."},
-{name:"M. tuberculosis virulenta · oncosis",label:"🟤 Micobacteria · M. tuberculosis virulenta",info:"El material relaciona la muerte oncótica/caspasa-independiente con supervivencia del patógeno."},
-{name:"Carga bacteriana alta · muerte caspasa-independiente",label:"⚠️ Alta carga · M. tuberculosis",info:"A alta multiplicidad de infección, el artículo describe una forma de muerte caspasa-independiente no observada a baja MOI."},
-{name:"M. tuberculosis · autofagia",label:"🟤 Micobacteria · M. tuberculosis",info:"La autofagia puede superar el bloqueo de maduración fagolisosomal y favorecer degradación bacteriana."},
-{name:"T. gondii · autofagia",label:"🦠 Parásito · Toxoplasma gondii",info:"El artículo incluye T. gondii entre los patógenos que pueden ser dirigidos a eliminación por autofagia."},
-{name:"GAS · autofagia",label:"🟣 Gram (+) · Streptococcus pyogenes",info:"La deficiencia de Atg5 permitió supervivencia de GAS, apoyando un papel de autofagia en aclaramiento."},
-{name:"Poliovirus/Rhinovirus · autofagia",label:"🧬 Virus · Poliovirus / Rhinovirus",info:"El material describe que estos virus pueden aprovechar la maquinaria autofágica, asociándola con supervivencia del patógeno."}
+// APOPTOSIS
+{name:"S. pneumoniae",label:"🟣 Gram (+) · Streptococcus pneumoniae",category:"apoptosis",info:"Apoptosis de macrófagos alveolares; en el artículo se asocia con eliminación del patógeno."},
+{name:"H. pylori",label:"🔴 Gram (−) · Helicobacter pylori",category:"apoptosis",info:"El artículo describe apoptosis de células epiteliales gástricas dependiente de Fas."},
+{name:"P. aeruginosa · apoptosis",label:"🔴 Gram (−) · Pseudomonas aeruginosa",category:"apoptosis",info:"En ratones WT, la infección produjo apoptosis de células epiteliales pulmonares; la señalización CD95 participa en la defensa."},
+{name:"Yersinia · apoptosis",label:"🔴 Gram (−) · Yersinia pseudotuberculosis / Y. pestis",category:"apoptosis",info:"En macrófagos, YopJ inhibe NF-κB/MAPK y se asocia con apoptosis y supervivencia del patógeno."},
+
+// PIROPTOSIS
+{name:"Shigella",label:"🔴 Gram (−) · Shigella flexneri",category:"piroptosis",info:"Muerte de macrófagos dependiente de caspasa-1; el artículo la diferencia de apoptosis."},
+{name:"Salmonella",label:"🔴 Gram (−) · Salmonella Typhimurium",category:"piroptosis",info:"En macrófagos se describe muerte rápida dependiente de caspasa-1."},
+{name:"Listeria",label:"🟣 Gram (+) · Listeria monocytogenes",category:"piroptosis",info:"El artículo incluye piroptosis asociada a reconocimiento por inflamasoma y aclaramiento."},
+{name:"Francisella",label:"🔴 Gram (−) · Francisella tularensis",category:"piroptosis",info:"Macrófagos deficientes en caspasa-1/ASC son resistentes a la muerte rápida; el desenlace se relaciona con aclaramiento."},
+
+// ONCOSIS / CASPASE-INDEPENDENT
+{name:"MTB alta carga",label:"🟤 Micobacteria · M. tuberculosis (alta MOI)",category:"oncosis",info:"A alta carga intracelular, el artículo describe muerte caspasa-independiente."},
+{name:"Shigella alta MOI",label:"🔴 Gram (−) · Shigella flexneri (alta MOI)",category:"oncosis",info:"A mayor MOI se describe pyronecrosis, una muerte caspasa-1-independiente."},
+{name:"Pseudomonas ExoU",label:"🔴 Gram (−) · P. aeruginosa ExoU+",category:"oncosis",info:"Cepas ExoU+ bloquean caspasa-1 pero matan eficientemente macrófagos mediante muerte caspasa-independiente."},
+{name:"B. pseudomallei",label:"🔴 Gram (−) · Burkholderia pseudomallei",category:"oncosis",info:"El artículo señala un fenotipo oncótico en células infectadas, aunque lo clasifica experimentalmente dentro de muerte dependiente de caspasa-1. Se incluye aquí como ejemplo morfológico oncótico."},
+
+// AUTOPHAGY
+{name:"MTB autofagia",label:"🟤 Micobacteria · Mycobacterium tuberculosis",category:"autofagia",info:"La autofagia puede superar el bloqueo de maduración fagolisosomal y favorecer degradación bacteriana."},
+{name:"Listeria autofagia",label:"🟣 Gram (+) · Listeria monocytogenes",category:"autofagia",info:"El artículo describe a Listeria como blanco de autofagia y la relaciona con aclaramiento."},
+{name:"Salmonella autofagia",label:"🔴 Gram (−) · Salmonella enterica",category:"autofagia",info:"La autofagia puede controlar Salmonella tras daño de la vacuola que contiene la bacteria."},
+{name:"Toxoplasma",label:"🦠 Parásito · Toxoplasma gondii",category:"autofagia",info:"El artículo incluye T. gondii entre los patógenos dirigidos a eliminación por autofagia."}
 ];
-let score=0,placed=0;
+
+let score=0,placed=0,dragged=null;
 function shuffle(a){return [...a].sort(()=>Math.random()-0.5)}
-function render(){const b=document.getElementById("piecebox");shuffle(cards).forEach((p,i)=>{const e=document.createElement("div");e.className="card";e.draggable=true;e.innerHTML=p.label+'<br><span class="badge">arrastra según el contexto</span>';e.dataset.id=i;e.dataset.name=p.name;e.addEventListener("dragstart",x=>x.dataTransfer.setData("text/plain",JSON.stringify({name:p.name,id:i})));b.appendChild(e)})}
-document.querySelectorAll(".slot").forEach(s=>{s.addEventListener("dragover",e=>e.preventDefault());s.addEventListener("drop",e=>{e.preventDefault();let d;try{d=JSON.parse(e.dataTransfer.getData("text/plain"))}catch{return}const p=cards.find(x=>x.name===d.name);if(s.dataset.answer===d.name&&!s.classList.contains("correct")){score+=100;placed++;s.classList.add("correct");s.innerHTML="<b>"+p.label+"</b>";const o=[...document.querySelectorAll(".card")].find(x=>x.dataset.id==d.id);if(o)o.remove();document.getElementById("score").textContent=score;document.getElementById("feedback").innerHTML='<span class="success">✓ Correcto.</span><br>'+p.info}else{s.classList.add("wrong");setTimeout(()=>s.classList.remove("wrong"),650);document.getElementById("feedback").innerHTML='<span class="error">✗ No corresponde a este escenario.</span><br><span class="hint">Recuerda: el mismo patógeno puede activar más de una modalidad dependiendo del contexto.</span>'}})})
-function checkLevel(){if(placed===cards.length){document.getElementById("feedback").innerHTML='<span class="success">🏆 Puzzle completado.</span><br>Ahora interpreta quién se beneficia de cada respuesta.';document.getElementById("challenge").style.display="block";document.getElementById("finalcase").style.display="block"}else document.getElementById("feedback").innerHTML='<span class="hint">Aún faltan '+(cards.length-placed)+' escenarios.</span>'}
-function ans(b,ok,id){if(ok){b.classList.add("good");document.getElementById(id).innerHTML='<span class="success">✓ Correcto.</span>'}else{b.classList.add("bad");document.getElementById(id).innerHTML='<span class="error">✗ Revisa el desenlace hospedero–patógeno descrito.</span>'}}
-function finalAns(b,a){if(a==="contexto"){b.classList.add("good");document.getElementById("fc").innerHTML='<span class="success">✓ Excelente.</span> La carga y el contexto pueden modificar la modalidad de muerte celular.'}else{b.classList.add("bad");document.getElementById("fc").innerHTML='<span class="error">✗ Demasiado absoluto.</span> Las modalidades no son mutuamente excluyentes.'}}
+
+function render(){
+ const b=document.getElementById("piecebox");
+ shuffle(cards).forEach(p=>{
+   const e=document.createElement("div");
+   e.className="card"; e.draggable=true;
+   e.innerHTML=p.label+'<br><span class="badge">arrastra según el contexto</span>';
+   e.addEventListener("dragstart",ev=>{
+      dragged={...p,element:e};
+      ev.dataTransfer.setData("text/plain",p.name);
+   });
+   b.appendChild(e);
+ });
+}
+
+document.querySelectorAll(".slot").forEach(s=>{
+ s.addEventListener("dragover",e=>e.preventDefault());
+ s.addEventListener("drop",e=>{
+   e.preventDefault();
+   if(!dragged || s.classList.contains("correct"))return;
+   if(s.dataset.category===dragged.category){
+     score+=100; placed++;
+     s.classList.add("correct");
+     s.innerHTML="<b>"+dragged.label+"</b>";
+     dragged.element.remove();
+     document.getElementById("score").textContent=score;
+     document.getElementById("feedback").innerHTML='<span class="success">✓ Correcto.</span><br>'+dragged.info;
+   }else{
+     s.classList.add("wrong");setTimeout(()=>s.classList.remove("wrong"),650);
+     document.getElementById("feedback").innerHTML='<span class="error">✗ No corresponde a esa modalidad.</span><br><span class="hint">Usa el contexto experimental, no solo el tipo de microorganismo.</span>';
+   }
+   dragged=null;
+ });
+});
+
+function checkLevel(){
+ if(placed===16){
+   document.getElementById("feedback").innerHTML='<span class="success">🏆 Nivel completado.</span><br>Clasificaste los 16 escenarios.';
+   document.getElementById("challenge").style.display="block";
+ }else{
+   document.getElementById("feedback").innerHTML='<span class="hint">Aún faltan '+(16-placed)+' escenarios.</span>';
+ }
+}
+
+function answer(b,a){
+ if(a==="contexto"){
+  b.classList.add("good");
+  document.getElementById("cf").innerHTML='<span class="success">✓ Correcto.</span> Esa es la idea central de la actividad.';
+ }else{
+  b.classList.add("bad");
+  document.getElementById("cf").innerHTML='<span class="error">✗ Incorrecto.</span> La modalidad no está determinada únicamente por la taxonomía.';
+ }
+}
 render();
 </script></body></html>
 """
-    components.html(html, height=1700, scrolling=True)
-
+    components.html(html, height=1850, scrolling=True)
