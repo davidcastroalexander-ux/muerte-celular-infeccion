@@ -1175,7 +1175,6 @@ elif nivel == "Nivel 7 · Patógeno → respuesta celular":
 .top{display:flex;justify-content:space-between;align-items:center;gap:12px}.title{font-size:24px;font-weight:800}
 .score{background:#fff;border:1px solid #ddd;border-radius:12px;padding:10px 14px;font-weight:800}
 .instructions{background:#eef5ff;border-left:5px solid #2563eb;padding:12px 14px;border-radius:12px;margin:14px 0}
-.note{background:#fff8e6;border-left:5px solid #f59f00;padding:11px 14px;border-radius:12px;margin-bottom:14px}
 .layout{display:grid;grid-template-columns:350px 1fr;gap:16px}.panel{background:#fff;border:1px solid #d9dee5;border-radius:16px;padding:16px}
 .card{border:2px solid #64748b;background:#f8fafc;border-radius:12px;padding:10px;margin:8px 0;font-weight:800;text-align:center;cursor:grab}
 .grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.col{border:1px solid #d5dce3;border-radius:16px;padding:12px;min-height:570px}
@@ -1198,13 +1197,6 @@ button{border:0;border-radius:10px;padding:10px 14px;font-weight:800;cursor:poin
 <div class="instructions">
   <b>Misión final:</b> clasifica 16 escenarios infecciosos. Hay <b>4 escenarios por cada desenlace</b>.
   El orden dentro de cada columna no importa.
-</div>
-
-<div class="note">
-  <b>Precisión científica:</b> la cuarta columna roja se denomina
-  <b>“Oncosis / muerte lítica caspasa-independiente”</b> porque el artículo no documenta
-  cuatro microorganismos diferentes como oncosis clásica. Incluye fenómenos caspasa-independientes
-  u oncóticos relacionados, claramente identificados por su contexto experimental.
 </div>
 
 <div class="layout">
