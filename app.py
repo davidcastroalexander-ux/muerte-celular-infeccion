@@ -7,7 +7,7 @@ st.caption("Puzzle molecular interactivo · Apoptosis, piroptosis y autofagia")
 
 nivel = st.radio(
     "Selecciona el nivel",
-    ["Nivel 1 · Vía extrínseca", "Nivel 2 · Vía intrínseca", "Nivel 3 · Conexión BID–tBID", "Nivel 4 · Piroptosis"],
+    ["Nivel 1 · Vía extrínseca", "Nivel 2 · Vía intrínseca", "Nivel 3 · Conexión BID–tBID", "Nivel 4 · Piroptosis", "Nivel 5 · Autofagia"],
     horizontal=True,
 )
 
@@ -996,3 +996,86 @@ renderPieces();
 </html>
 """
     components.html(html, height=1600, scrolling=True)
+
+elif nivel == "Nivel 5 · Autofagia":
+    html = r"""
+<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8">
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial;background:#f6f8fb;color:#17212b}.wrap{padding:16px}
+.top{display:flex;justify-content:space-between;align-items:center}.title{font-size:24px;font-weight:800}
+.score{background:#fff;border:1px solid #ddd;border-radius:12px;padding:10px 14px;font-weight:800}
+.instructions{background:#ecfdf5;border-left:5px solid #16a34a;padding:12px 14px;border-radius:12px;margin:14px 0}
+.layout{display:grid;grid-template-columns:320px 1fr;gap:16px}.panel{background:#fff;border:1px solid #d9dee5;border-radius:16px;padding:16px}
+.piece{border:2px solid #16a34a;background:#f0fdf4;border-radius:12px;padding:10px;margin:8px 0;font-weight:800;text-align:center;cursor:grab}
+.cell{border-radius:28px;overflow:hidden;border:2px solid #b9c4cf}.cyto{background:#eefbf5;padding:18px}
+.zone{font-size:13px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#5d6a76;margin-bottom:10px}
+.row{display:flex;justify-content:center;align-items:center;gap:10px;flex-wrap:wrap}.arrow{text-align:center;font-size:25px;font-weight:800;margin:4px}
+.slot{min-width:210px;min-height:72px;border:2px dashed #98a5b3;border-radius:14px;background:#fff;display:flex;align-items:center;justify-content:center;text-align:center;padding:10px;font-weight:700}
+.correct{border:2px solid #2f9e44!important;background:#e9f8ec!important}.wrong{border:2px solid #d9485f!important;background:#fff0f2!important}
+.branch{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin:12px 0}.box{border:1px solid #cfd7df;border-radius:16px;padding:14px;background:#fff}
+.feedback,.question,.summary{margin-top:14px;padding:14px;border-radius:12px;border:1px solid #d9dee5;background:#fff}
+.success{color:#237a35;font-weight:800}.error{color:#c92a2a;font-weight:800}.hint{color:#4d5964}
+button{border:0;border-radius:10px;padding:10px 14px;font-weight:800;cursor:pointer;margin-top:10px;margin-right:8px}.primary{background:#263b5e;color:#fff}.secondary{background:#6c757d;color:#fff}
+.option{display:block;width:100%;text-align:left;background:#f3f6f9;color:#17212b}.good{background:#e9f8ec!important;color:#14532d}.bad{background:#fff0f2!important;color:#9f1239}
+@media(max-width:950px){.layout,.branch{grid-template-columns:1fr}}
+</style></head><body><div class="wrap">
+<div class="top"><div class="title">Nivel 5 · Autofagia durante la infección</div><div class="score">Puntaje: <span id="score">0</span>/800</div></div>
+<div class="instructions"><b>Misión:</b> reconstruye cómo una célula puede secuestrar material intracelular o un microorganismo en una vacuola de doble membrana y dirigirlo a degradación lisosomal.</div>
+<div class="layout">
+<div class="panel"><h3>🧩 Piezas</h3><div id="piecebox"></div></div>
+<div class="panel"><div class="cell"><div class="cyto">
+<div class="zone">Citoplasma de una célula infectada</div>
+<div class="row"><div class="slot" data-answer="Patógeno intracelular">🦠 Blanco intracelular</div></div><div class="arrow">↓</div>
+<div class="row"><div class="slot" data-answer="ATG / Beclin">Maquinaria reguladora</div></div><div class="arrow">↓</div>
+<div class="row"><div class="slot" data-answer="Fagóforo">Membrana de aislamiento</div></div><div class="arrow">↓ elongación y cierre</div>
+<div class="row"><div class="slot" data-answer="ATG8 / LC3">Proteína asociada a la membrana autofágica</div></div><div class="arrow">↓</div>
+<div class="row"><div class="slot" data-answer="Autofagosoma">Vacuola de doble membrana</div></div><div class="arrow">+</div>
+<div class="row"><div class="slot" data-answer="Lisosoma">Compartimento con enzimas degradativas</div></div><div class="arrow">↓ fusión</div>
+<div class="row"><div class="slot" data-answer="Autofagolisosoma">Compartimento de degradación</div></div><div class="arrow">↓</div>
+<div class="row"><div class="slot" data-answer="Degradación del contenido">♻️ Degradación</div></div>
+</div></div>
+
+<div class="feedback" id="feedback"><b>Retroalimentación</b><br><span class="hint">Identifica primero qué debe ser capturado y qué maquinaria organiza el proceso.</span></div>
+<button class="primary" onclick="checkLevel()">Comprobar nivel</button><button class="secondary" onclick="location.reload()">Reiniciar</button>
+
+<div class="question" id="challenge" style="display:none"><b>Desafío: ¿la autofagia siempre beneficia al hospedero?</b>
+<button class="option" onclick="answer(this,'no')">No. Puede eliminar patógenos, pero algunos microorganismos pueden subvertir la maquinaria autofágica.</button>
+<button class="option" onclick="answer(this,'si')">Sí. Siempre destruye al microorganismo.</button>
+<button class="option" onclick="answer(this,'muerte')">Sí. Autofagia significa necesariamente muerte celular.</button>
+<div id="cf"></div></div>
+
+<div class="question" id="cases" style="display:none"><b>Reto infeccioso</b><br><br>
+<b>1.</b> En una célula infectada por <i>Streptococcus</i> del grupo A, la autofagia puede contribuir principalmente a:
+<button class="option" onclick="caseAnswer(this,true,'c1')">Eliminación del patógeno</button>
+<button class="option" onclick="caseAnswer(this,false,'c1')">Favorecer obligatoriamente su replicación</button><div id="c1"></div><br>
+<b>2.</b> Poliovirus y rinovirus pueden:
+<button class="option" onclick="caseAnswer(this,true,'c2')">Subvertir la formación de autofagosomas en beneficio de su replicación</button>
+<button class="option" onclick="caseAnswer(this,false,'c2')">Ser siempre destruidos por autofagia</button><div id="c2"></div>
+</div>
+
+<div class="summary"><b>Idea clave:</b> autofagia no equivale automáticamente a muerte celular. El material base la describe como un proceso regulado importante para homeostasis y supervivencia; cuando es excesiva puede asociarse con muerte celular autofágica. Durante infección puede ser protectora o ser explotada por determinados patógenos.</div>
+</div></div></div>
+
+<script>
+const pieces=[
+{name:"Patógeno intracelular",info:"Durante la infección, la autofagia puede dirigir microorganismos intracelulares hacia compartimentos degradativos sin eliminar necesariamente toda la célula."},
+{name:"ATG / Beclin",info:"El artículo base describe la autofagia como un proceso regulado por proteínas ATG/Beclin."},
+{name:"Fagóforo",info:"La membrana de aislamiento comienza a rodear el material que será secuestrado."},
+{name:"ATG8 / LC3",info:"ATG8/LC3 se asocia con la membrana autofágica; la figura del material lo representa en la formación del autofagosoma."},
+{name:"Autofagosoma",info:"Es una vacuola de doble membrana que captura componentes intracelulares."},
+{name:"Lisosoma",info:"Aporta el compartimento y las enzimas necesarias para la degradación lisosomal."},
+{name:"Autofagolisosoma",info:"La fusión del autofagosoma con el compartimento lisosomal permite la degradación del contenido secuestrado."},
+{name:"Degradación del contenido",info:"El contenido capturado es degradado. Durante infección esto puede contribuir a la eliminación de determinados patógenos."}
+];
+let score=0,used=new Set();
+function shuffle(a){return [...a].sort(()=>Math.random()-0.5)}
+function render(){const box=document.getElementById("piecebox");shuffle(pieces).forEach(p=>{const e=document.createElement("div");e.className="piece";e.draggable=true;e.textContent=p.name;e.dataset.name=p.name;e.addEventListener("dragstart",x=>x.dataTransfer.setData("text/plain",p.name));box.appendChild(e)})}
+document.querySelectorAll(".slot[data-answer]").forEach(s=>{s.addEventListener("dragover",e=>e.preventDefault());s.addEventListener("drop",e=>{e.preventDefault();const n=e.dataTransfer.getData("text/plain"),p=pieces.find(x=>x.name===n);if(!p)return;if(s.dataset.answer===n){if(!used.has(n)){score+=100;used.add(n)}s.className="slot correct";s.innerHTML="<b>"+n+"</b>";const o=[...document.querySelectorAll(".piece")].find(x=>x.dataset.name===n);if(o)o.remove();document.getElementById("score").textContent=score;document.getElementById("feedback").innerHTML='<span class="success">✓ Correcto.</span><br>'+p.info}else{s.classList.add("wrong");setTimeout(()=>s.classList.remove("wrong"),700);document.getElementById("feedback").innerHTML='<span class="error">✗ Incorrecto.</span><br><span class="hint">Piensa en la secuencia: reconocimiento/captura → doble membrana → fusión lisosomal → degradación.</span>'}})})
+function checkLevel(){if(used.size===pieces.length){document.getElementById("feedback").innerHTML='<span class="success">🏆 Nivel completado.</span><br>Has reconstruido la secuencia general de autofagia.';document.getElementById("challenge").style.display="block";document.getElementById("cases").style.display="block"}else document.getElementById("feedback").innerHTML='<span class="hint">Aún faltan '+(pieces.length-used.size)+' piezas.</span>'}
+function answer(b,a){document.querySelectorAll("#challenge .option").forEach(x=>x.classList.remove("good","bad"));if(a==="no"){b.classList.add("good");document.getElementById("cf").innerHTML='<span class="success">✓ Correcto.</span> El resultado depende del patógeno y del contexto de infección.'}else{b.classList.add("bad");document.getElementById("cf").innerHTML='<span class="error">✗ Incorrecto.</span> Autofagia puede favorecer la defensa, pero no siempre.'}}
+function caseAnswer(b,ok,id){if(ok){b.classList.add("good");document.getElementById(id).innerHTML='<span class="success">✓ Correcto.</span>'}else{b.classList.add("bad");document.getElementById(id).innerHTML='<span class="error">✗ Revisa el papel de la autofagia en este patógeno.</span>'}}
+render();
+</script></body></html>
+"""
+    components.html(html, height=1800, scrolling=True)
+
