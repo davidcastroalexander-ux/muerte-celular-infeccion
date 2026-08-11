@@ -3,9 +3,16 @@ import streamlit.components.v1 as components
 
 st.set_page_config(page_title="Muerte celular en la infección", page_icon="🧬", layout="wide")
 st.title("🧬 Muerte celular en la infección")
-st.caption("Puzzle molecular interactivo · Nivel 1: apoptosis extrínseca")
+st.caption("Puzzle molecular interactivo · Apoptosis, piroptosis y autofagia")
 
-html = r"""
+nivel = st.radio(
+    "Selecciona el nivel",
+    ["Nivel 1 · Vía extrínseca", "Nivel 2 · Vía intrínseca"],
+    horizontal=True,
+)
+
+if nivel == "Nivel 1 · Vía extrínseca":
+    html = r"""
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -242,5 +249,266 @@ renderPieces();
 </body>
 </html>
 """
+    components.html(html, height=1180, scrolling=True)
 
-components.html(html, height=1180, scrolling=True)
+elif nivel == "Nivel 2 · Vía intrínseca":
+    html = r"""
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f6f8fb;color:#17212b}
+.wrap{padding:16px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px}
+.title{font-size:24px;font-weight:800}
+.score{background:#fff;border:1px solid #d9dee5;border-radius:12px;padding:10px 14px;font-weight:800}
+.instructions{background:#eef5ff;border-left:5px solid #4c7bd9;padding:12px 14px;border-radius:12px;margin-bottom:14px}
+.layout{display:grid;grid-template-columns:320px 1fr;gap:16px}
+.panel{background:#fff;border:1px solid #d9dee5;border-radius:16px;padding:16px}
+.panel h3{margin-top:0}
+.piece{border:2px solid #6f8dd6;background:#eef4ff;border-radius:12px;padding:10px;margin:8px 0;font-weight:800;text-align:center;cursor:grab}
+.piece:hover{transform:scale(1.01)}
+.cell{border-radius:28px;overflow:hidden;border:2px solid #b9c4cf;background:#fff}
+.zone-title{font-size:13px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#5d6a76;margin-bottom:8px}
+.cytoplasm{background:#eef6ff;padding:18px}
+.mitozone{background:#f4f7f8;padding:18px;border-top:1px solid #d6dde4;border-bottom:1px solid #d6dde4}
+.row{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap}
+.arrow{font-size:25px;font-weight:800;color:#3b4a5a;margin:3px 0;text-align:center}
+.slot{min-width:190px;min-height:72px;border:2px dashed #98a5b3;border-radius:14px;background:#ffffffd8;display:flex;align-items:center;justify-content:center;text-align:center;padding:10px;font-weight:700}
+.slot.correct{border:2px solid #2f9e44;background:#e9f8ec}
+.slot.wrong{border:2px solid #d9485f;background:#fff0f2}
+.branch{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:12px 0}
+.branchbox{border:1px solid #cfd7df;border-radius:16px;padding:14px;background:#ffffffa8}
+.branch-title{font-weight:800;margin-bottom:8px;text-align:center}
+.feedback{margin-top:14px;padding:14px;border-radius:12px;border:1px solid #d9dee5;background:#fff;min-height:92px}
+.success{color:#237a35;font-weight:800}.error{color:#c92a2a;font-weight:800}.hint{color:#4d5964}
+button{border:0;border-radius:10px;padding:10px 14px;font-weight:800;cursor:pointer;margin-top:12px;margin-right:8px}
+.primary{background:#263b5e;color:#fff}.secondary{background:#6c757d;color:#fff}
+.question{margin-top:14px;border:1px solid #d7dde4;border-radius:14px;padding:14px;background:#fff}
+.option{display:block;width:100%;text-align:left;margin:6px 0;background:#f3f6f9;color:#17212b}
+.option.correct-answer{background:#e9f8ec;color:#14532d}.option.wrong-answer{background:#fff0f2;color:#9f1239}
+.mito{font-size:56px;text-align:center;margin:4px 0}
+@media(max-width:950px){.layout{grid-template-columns:1fr}.branch{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="top">
+  <div class="title">Nivel 2 · Vía intrínseca / mitocondrial</div>
+  <div class="score">Puntaje: <span id="score">0</span>/1000</div>
+</div>
+
+<div class="instructions">
+  Reconstruye la vía intrínseca de apoptosis. En este nivel no solo hay activadores: también debes reconocer reguladores inhibitorios.
+</div>
+
+<div class="layout">
+  <div class="panel">
+    <h3>🧩 Piezas moleculares</h3>
+    <div id="piecebox"></div>
+  </div>
+
+  <div class="panel">
+    <div class="cell">
+
+      <div class="cytoplasm">
+        <div class="zone-title">Estímulos intracelulares</div>
+        <div class="row">
+          <div class="slot" data-answer="Estrés intracelular">Daño del ADN / estrés del RE / hipoxia / estrés metabólico</div>
+        </div>
+        <div class="arrow">↓</div>
+        <div class="row">
+          <div class="slot" data-answer="Proteínas BH3-only">Proteínas BH3-only</div>
+        </div>
+
+        <div class="branch">
+          <div class="branchbox">
+            <div class="branch-title">Regulación antiapoptótica</div>
+            <div class="row">
+              <div class="slot" data-answer="BCL-2 / BCL-XL / MCL1">Proteínas antiapoptóticas</div>
+            </div>
+          </div>
+
+          <div class="branchbox">
+            <div class="branch-title">Activación proapoptótica</div>
+            <div class="row">
+              <div class="slot" data-answer="BAX / BAK">BAX / BAK</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="arrow">↓</div>
+      </div>
+
+      <div class="mitozone">
+        <div class="zone-title">Mitocondria</div>
+        <div class="mito">🫘</div>
+        <div class="row">
+          <div class="slot" data-answer="MOMP">Permeabilización de la membrana externa mitocondrial</div>
+        </div>
+        <div class="arrow">↓</div>
+
+        <div class="branch">
+          <div class="branchbox">
+            <div class="branch-title">Liberación mitocondrial 1</div>
+            <div class="row">
+              <div class="slot" data-answer="Citocromo c">Citocromo c</div>
+            </div>
+          </div>
+
+          <div class="branchbox">
+            <div class="branch-title">Liberación mitocondrial 2</div>
+            <div class="row">
+              <div class="slot" data-answer="SMAC / DIABLO">SMAC / DIABLO</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="cytoplasm">
+        <div class="row">
+          <div class="slot" data-answer="APAF-1">APAF-1</div>
+        </div>
+        <div class="arrow">↓</div>
+        <div class="row">
+          <div class="slot" data-answer="Apoptosoma">Apoptosoma</div>
+        </div>
+        <div class="arrow">↓</div>
+        <div class="row">
+          <div class="slot" data-answer="Caspasa-9">Caspasa-9</div>
+        </div>
+
+        <div class="branch">
+          <div class="branchbox">
+            <div class="branch-title">Ejecución</div>
+            <div class="row">
+              <div class="slot" data-answer="Caspasa-3 / -7">Caspasa-3 / -7</div>
+            </div>
+          </div>
+
+          <div class="branchbox">
+            <div class="branch-title">Control de caspasas</div>
+            <div class="row">
+              <div class="slot" data-answer="XIAP">XIAP</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="arrow">↓</div>
+        <div class="row">
+          <div class="slot" data-answer="Apoptosis">Apoptosis</div>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="feedback" id="feedback">
+      <b>Retroalimentación</b><br>
+      <span class="hint">Comienza con el estímulo intracelular que activa proteínas BH3-only.</span>
+    </div>
+
+    <button class="primary" onclick="checkLevel()">Comprobar nivel</button>
+    <button class="secondary" onclick="location.reload()">Reiniciar</button>
+
+    <div class="question" id="challenge" style="display:none">
+      <b>Desafío final</b><br>
+      ¿Qué evento constituye el punto decisivo que permite la liberación de citocromo c desde la mitocondria?
+      <div>
+        <button class="option" onclick="answerChallenge(this,'MOMP')">MOMP</button>
+        <button class="option" onclick="answerChallenge(this,'DISC')">Formación del DISC</button>
+        <button class="option" onclick="answerChallenge(this,'Caspasa-1')">Activación de caspasa-1</button>
+        <button class="option" onclick="answerChallenge(this,'NF-kB')">Activación de NF-κB</button>
+      </div>
+      <div id="challengeFeedback"></div>
+    </div>
+  </div>
+</div>
+</div>
+
+<script>
+const piecesData=[
+{name:"Estrés intracelular",info:"Daño del ADN, estrés del retículo endoplásmico, hipoxia y estrés metabólico pueden activar la vía intrínseca."},
+{name:"Proteínas BH3-only",info:"Las proteínas BH3-only funcionan como sensores de estrés y favorecen la activación de la maquinaria proapoptótica."},
+{name:"BCL-2 / BCL-XL / MCL1",info:"Estas proteínas antiapoptóticas restringen la activación de BAX y BAK y ayudan a preservar la integridad mitocondrial."},
+{name:"BAX / BAK",info:"BAX y BAK son efectores proapoptóticos que oligomerizan en la membrana externa mitocondrial."},
+{name:"MOMP",info:"La permeabilización de la membrana externa mitocondrial permite la salida de proteínas proapoptóticas al citosol."},
+{name:"Citocromo c",info:"El citocromo c liberado al citosol se asocia con APAF-1 y favorece la formación del apoptosoma."},
+{name:"SMAC / DIABLO",info:"SMAC/DIABLO favorece la apoptosis al antagonizar proteínas inhibidoras de apoptosis como XIAP."},
+{name:"APAF-1",info:"APAF-1 es un componente central de la plataforma que forma el apoptosoma."},
+{name:"Apoptosoma",info:"El apoptosoma recluta y activa caspasa-9."},
+{name:"Caspasa-9",info:"Caspasa-9 es la caspasa iniciadora característica de la vía mitocondrial."},
+{name:"Caspasa-3 / -7",info:"Las caspasas ejecutoras procesan múltiples sustratos y producen los cambios morfológicos de la apoptosis."},
+{name:"XIAP",info:"XIAP inhibe caspasas; su acción puede ser contrarrestada por SMAC/DIABLO."},
+{name:"Apoptosis",info:"Desenlace final con contracción celular, condensación de cromatina y formación de cuerpos apoptóticos."}
+];
+let score=0, used=new Set();
+
+function shuffle(a){return [...a].sort(()=>Math.random()-0.5)}
+
+function renderPieces(){
+ const box=document.getElementById("piecebox");
+ box.innerHTML="";
+ shuffle(piecesData).forEach(p=>{
+   const el=document.createElement("div");
+   el.className="piece";
+   el.draggable=true;
+   el.textContent=p.name;
+   el.dataset.name=p.name;
+   el.addEventListener("dragstart",e=>e.dataTransfer.setData("text/plain",p.name));
+   box.appendChild(el);
+ });
+}
+
+document.querySelectorAll(".slot[data-answer]").forEach(slot=>{
+ slot.addEventListener("dragover",e=>e.preventDefault());
+ slot.addEventListener("drop",e=>{
+   e.preventDefault();
+   const name=e.dataTransfer.getData("text/plain");
+   const piece=piecesData.find(x=>x.name===name);
+   if(!piece)return;
+
+   if(slot.dataset.answer===name){
+     if(!used.has(name)){score+=100;used.add(name)}
+     slot.className="slot correct";
+     slot.innerHTML="<b>"+name+"</b>";
+     const original=[...document.querySelectorAll(".piece")].find(x=>x.dataset.name===name);
+     if(original)original.remove();
+     document.getElementById("score").textContent=score;
+     document.getElementById("feedback").innerHTML='<span class="success">✓ Correcto.</span><br>'+piece.info;
+   }else{
+     slot.classList.add("wrong");
+     setTimeout(()=>slot.classList.remove("wrong"),700);
+     document.getElementById("feedback").innerHTML='<span class="error">✗ Incorrecto.</span><br><span class="hint">Piensa si esta molécula activa, inhibe o ejecuta la apoptosis y dónde actúa.</span>';
+   }
+ });
+});
+
+function checkLevel(){
+ if(used.size===piecesData.length){
+   document.getElementById("feedback").innerHTML='<span class="success">🏆 Nivel completado.</span><br>Has reconstruido correctamente la vía intrínseca de apoptosis.';
+   document.getElementById("challenge").style.display="block";
+ }else{
+   document.getElementById("feedback").innerHTML='<span class="hint">Aún faltan '+(piecesData.length-used.size)+' piezas.</span>';
+ }
+}
+
+function answerChallenge(btn,ans){
+ document.querySelectorAll(".option").forEach(b=>b.classList.remove("correct-answer","wrong-answer"));
+ const fb=document.getElementById("challengeFeedback");
+ if(ans==="MOMP"){
+   btn.classList.add("correct-answer");
+   fb.innerHTML='<span class="success">✓ Correcto.</span> MOMP permite la liberación de citocromo c y otras proteínas mitocondriales proapoptóticas.';
+ }else{
+   btn.classList.add("wrong-answer");
+   fb.innerHTML='<span class="error">✗ Incorrecto.</span> Busca el evento que altera directamente la membrana externa mitocondrial.';
+ }
+}
+
+renderPieces();
+</script>
+</body>
+</html>
+"""
+    components.html(html, height=1550, scrolling=True)
