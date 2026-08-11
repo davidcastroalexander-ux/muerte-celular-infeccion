@@ -1,0 +1,1 @@
+# Puzzle interactivo\n\nEjecuta con:\n\n```bash\npip install -r requirements.txt\nstreamlit run app.py\n```\n
