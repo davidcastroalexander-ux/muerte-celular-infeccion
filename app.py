@@ -7,7 +7,7 @@ st.caption("Puzzle molecular interactivo · Apoptosis, piroptosis y autofagia")
 
 nivel = st.radio(
     "Selecciona el nivel",
-    ["Nivel 1 · Vía extrínseca", "Nivel 2 · Vía intrínseca", "Nivel 3 · Conexión BID–tBID"],
+    ["Nivel 1 · Vía extrínseca", "Nivel 2 · Vía intrínseca", "Nivel 3 · Conexión BID–tBID", "Nivel 4 · Piroptosis"],
     horizontal=True,
 )
 
@@ -751,3 +751,248 @@ renderPieces();
 </html>
 """
     components.html(html, height=1540, scrolling=True)
+
+
+elif nivel == "Nivel 4 · Piroptosis":
+    html = r"""
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,Helvetica,sans-serif;background:#f6f8fb;color:#17212b}
+.wrap{padding:16px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:14px}
+.title{font-size:24px;font-weight:800}
+.score{background:#fff;border:1px solid #d9dee5;border-radius:12px;padding:10px 14px;font-weight:800}
+.instructions{background:#fff3e6;border-left:5px solid #f08c00;padding:12px 14px;border-radius:12px;margin-bottom:14px}
+.layout{display:grid;grid-template-columns:320px 1fr;gap:16px}
+.panel{background:#fff;border:1px solid #d9dee5;border-radius:16px;padding:16px}
+.panel h3{margin-top:0}
+.piece{border:2px solid #e67700;background:#fff4e6;border-radius:12px;padding:10px;margin:8px 0;font-weight:800;text-align:center;cursor:grab}
+.piece:hover{transform:scale(1.01)}
+.cell{border-radius:28px;overflow:hidden;border:2px solid #b9c4cf;background:#fff}
+.zone-title{font-size:13px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#5d6a76;margin-bottom:8px}
+.cytoplasm{background:#fff8f0;padding:18px}
+.nucleus{background:#fff3bf;padding:14px;border-top:1px solid #f1d68a;border-bottom:1px solid #f1d68a}
+.row{display:flex;align-items:center;justify-content:center;gap:10px;flex-wrap:wrap}
+.arrow{font-size:25px;font-weight:800;color:#3b4a5a;margin:3px 0;text-align:center}
+.slot{min-width:190px;min-height:72px;border:2px dashed #98a5b3;border-radius:14px;background:#ffffffd8;display:flex;align-items:center;justify-content:center;text-align:center;padding:10px;font-weight:700}
+.slot.correct{border:2px solid #2f9e44;background:#e9f8ec}
+.slot.wrong{border:2px solid #d9485f;background:#fff0f2}
+.branch{display:grid;grid-template-columns:1fr 1fr;gap:18px;margin:12px 0}
+.branchbox{border:1px solid #cfd7df;border-radius:16px;padding:14px;background:#ffffffa8}
+.branch-title{font-weight:800;margin-bottom:8px;text-align:center}
+.feedback{margin-top:14px;padding:14px;border-radius:12px;border:1px solid #d9dee5;background:#fff;min-height:92px}
+.success{color:#237a35;font-weight:800}.error{color:#c92a2a;font-weight:800}.hint{color:#4d5964}
+button{border:0;border-radius:10px;padding:10px 14px;font-weight:800;cursor:pointer;margin-top:12px;margin-right:8px}
+.primary{background:#263b5e;color:#fff}.secondary{background:#6c757d;color:#fff}
+.question{margin-top:14px;border:1px solid #d7dde4;border-radius:14px;padding:14px;background:#fff}
+.option{display:block;width:100%;text-align:left;margin:6px 0;background:#f3f6f9;color:#17212b}
+.option.correct-answer{background:#e9f8ec;color:#14532d}.option.wrong-answer{background:#fff0f2;color:#9f1239}
+.morph{margin-top:14px;display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.morph-step{border:1px solid #d6dde4;border-radius:12px;padding:10px;text-align:center;background:#fff}
+.morph-step .icon{font-size:28px}
+.summary{margin-top:14px;padding:14px;border-radius:14px;background:#fff9db;border:1px solid #ffe066}
+@media(max-width:950px){.layout{grid-template-columns:1fr}.branch{grid-template-columns:1fr}.morph{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="top">
+  <div class="title">Nivel 4 · Piroptosis</div>
+  <div class="score">Puntaje: <span id="score">0</span>/900</div>
+</div>
+
+<div class="instructions">
+  Reconstruye la secuencia que conduce a una muerte celular inflamatoria dependiente de caspasa-1.
+  El objetivo es distinguirla de la apoptosis.
+</div>
+
+<div class="layout">
+  <div class="panel">
+    <h3>🧩 Piezas moleculares</h3>
+    <div id="piecebox"></div>
+  </div>
+
+  <div class="panel">
+    <div class="cell">
+
+      <div class="cytoplasm">
+        <div class="zone-title">Citoplasma · reconocimiento de infección</div>
+        <div class="row">
+          <div class="slot" data-answer="PAMP / señal microbiana">Señal del patógeno en el citosol</div>
+        </div>
+        <div class="arrow">↓</div>
+
+        <div class="row">
+          <div class="slot" data-answer="NLR / sensor citosólico">Sensor intracelular</div>
+        </div>
+        <div class="arrow">↓</div>
+
+        <div class="row">
+          <div class="slot" data-answer="Inflamasoma">Plataforma multiproteica</div>
+        </div>
+        <div class="arrow">↓</div>
+
+        <div class="row">
+          <div class="slot" data-answer="Procaspasa-1">Caspasa inflamatoria inactiva</div>
+        </div>
+        <div class="arrow">↓ activación</div>
+
+        <div class="row">
+          <div class="slot" data-answer="Caspasa-1">Caspasa inflamatoria activa</div>
+        </div>
+
+        <div class="branch">
+          <div class="branchbox">
+            <div class="branch-title">Maduración de citocinas</div>
+            <div class="row">
+              <div class="slot" data-answer="IL-1β / IL-18 maduras">IL-1β / IL-18</div>
+            </div>
+          </div>
+
+          <div class="branchbox">
+            <div class="branch-title">Cambios celulares</div>
+            <div class="row">
+              <div class="slot" data-answer="Pérdida de integridad de membrana">Membrana permeable / ruptura</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="arrow">↓</div>
+
+        <div class="row">
+          <div class="slot" data-answer="Liberación de contenido citoplasmático">Contenido celular al exterior</div>
+        </div>
+        <div class="arrow">↓</div>
+
+        <div class="row">
+          <div class="slot" data-answer="Piroptosis">Muerte celular inflamatoria</div>
+        </div>
+      </div>
+
+      <div class="nucleus">
+        <div class="zone-title">Cambios nucleares asociados</div>
+        <div style="text-align:center;font-weight:700">
+          Fragmentación de ADN y condensación nuclear pueden presentarse, pero no definen por sí solas apoptosis.
+        </div>
+      </div>
+
+    </div>
+
+    <div class="feedback" id="feedback">
+      <b>Retroalimentación</b><br>
+      <span class="hint">Empieza por una señal microbiana detectada en el citosol y sigue hasta caspasa-1.</span>
+    </div>
+
+    <div class="morph">
+      <div class="morph-step"><div class="icon">🔥</div><b>Inflamación</b></div>
+      <div class="morph-step"><div class="icon">💧</div><b>Entrada de agua / tumefacción</b></div>
+      <div class="morph-step"><div class="icon">💥</div><b>Ruptura de membrana</b></div>
+      <div class="morph-step"><div class="icon">📣</div><b>Liberación de mediadores</b></div>
+    </div>
+
+    <button class="primary" onclick="checkLevel()">Comprobar nivel</button>
+    <button class="secondary" onclick="location.reload()">Reiniciar</button>
+
+    <div class="question" id="challenge" style="display:none">
+      <b>Desafío final</b><br>
+      ¿Cuál característica permite diferenciar mejor la piroptosis de la apoptosis clásica en esta actividad?
+      <div>
+        <button class="option" onclick="answerChallenge(this,'ruptura')">Pérdida de integridad de membrana y liberación de contenido citoplasmático</button>
+        <button class="option" onclick="answerChallenge(this,'dna')">Fragmentación del ADN</button>
+        <button class="option" onclick="answerChallenge(this,'nucleo')">Condensación nuclear</button>
+        <button class="option" onclick="answerChallenge(this,'c3')">Activación de caspasa-3 como evento definitorio</button>
+      </div>
+      <div id="challengeFeedback"></div>
+    </div>
+
+    <div class="summary">
+      <b>Idea clave:</b> en el artículo base, la piroptosis se caracteriza por activación de caspasa-1,
+      liberación de citocinas inflamatorias y pérdida de la integridad de la membrana plasmática.
+      Puede compartir fragmentación de ADN y condensación nuclear con otras formas de muerte.
+    </div>
+  </div>
+</div>
+</div>
+
+<script>
+const piecesData=[
+{name:"PAMP / señal microbiana",info:"Durante la infección, productos o señales del patógeno presentes en el citosol pueden iniciar la activación de la respuesta inflamatoria."},
+{name:"NLR / sensor citosólico",info:"Los receptores citosólicos tipo NLR actúan como sensores intracelulares y pueden participar en el ensamblaje de inflamasomas."},
+{name:"Inflamasoma",info:"El inflamasoma es una plataforma multiproteica que favorece el reclutamiento y activación de procaspasa-1."},
+{name:"Procaspasa-1",info:"Caspasa-1 se sintetiza como un zimógeno inactivo que requiere activación."},
+{name:"Caspasa-1",info:"Caspasa-1 activa participa en la maduración de citocinas inflamatorias y en la muerte celular piroptótica."},
+{name:"IL-1β / IL-18 maduras",info:"La activación de caspasa-1 favorece la generación de formas maduras de citocinas proinflamatorias como IL-1β e IL-18."},
+{name:"Pérdida de integridad de membrana",info:"Una característica destacada de la piroptosis es la pérdida de integridad de la membrana plasmática."},
+{name:"Liberación de contenido citoplasmático",info:"La salida de contenido celular al medio extracelular contribuye al carácter altamente inflamatorio de la piroptosis."},
+{name:"Piroptosis",info:"La piroptosis es una forma inflamatoria de muerte celular asociada, en el artículo base, con activación de caspasa-1."}
+];
+let score=0,used=new Set();
+
+function shuffle(a){return [...a].sort(()=>Math.random()-0.5)}
+
+function renderPieces(){
+ const box=document.getElementById("piecebox");
+ box.innerHTML="";
+ shuffle(piecesData).forEach(p=>{
+  const el=document.createElement("div");
+  el.className="piece";el.draggable=true;el.textContent=p.name;el.dataset.name=p.name;
+  el.addEventListener("dragstart",e=>e.dataTransfer.setData("text/plain",p.name));
+  box.appendChild(el);
+ });
+}
+
+document.querySelectorAll(".slot[data-answer]").forEach(slot=>{
+ slot.addEventListener("dragover",e=>e.preventDefault());
+ slot.addEventListener("drop",e=>{
+  e.preventDefault();
+  const name=e.dataTransfer.getData("text/plain");
+  const piece=piecesData.find(x=>x.name===name);
+  if(!piece)return;
+
+  if(slot.dataset.answer===name){
+    if(!used.has(name)){score+=100;used.add(name)}
+    slot.className="slot correct";
+    slot.innerHTML="<b>"+name+"</b>";
+    const original=[...document.querySelectorAll(".piece")].find(x=>x.dataset.name===name);
+    if(original)original.remove();
+    document.getElementById("score").textContent=score;
+    document.getElementById("feedback").innerHTML='<span class="success">✓ Correcto.</span><br>'+piece.info;
+  }else{
+    slot.classList.add("wrong");
+    setTimeout(()=>slot.classList.remove("wrong"),700);
+    document.getElementById("feedback").innerHTML='<span class="error">✗ Incorrecto.</span><br><span class="hint">Piensa si esta pieza pertenece al reconocimiento, activación de caspasa-1, liberación de citocinas o desenlace celular.</span>';
+  }
+ });
+});
+
+function checkLevel(){
+ if(used.size===piecesData.length){
+   document.getElementById("feedback").innerHTML='<span class="success">🏆 Nivel completado.</span><br>Has reconstruido correctamente la secuencia conceptual de piroptosis descrita en el material base.';
+   document.getElementById("challenge").style.display="block";
+ }else{
+   document.getElementById("feedback").innerHTML='<span class="hint">Aún faltan '+(piecesData.length-used.size)+' piezas.</span>';
+ }
+}
+
+function answerChallenge(btn,ans){
+ document.querySelectorAll(".option").forEach(b=>b.classList.remove("correct-answer","wrong-answer"));
+ const fb=document.getElementById("challengeFeedback");
+ if(ans==="ruptura"){
+   btn.classList.add("correct-answer");
+   fb.innerHTML='<span class="success">✓ Correcto.</span> La pérdida de integridad de membrana y la liberación del contenido citoplasmático explican el carácter inflamatorio de la piroptosis.';
+ }else{
+   btn.classList.add("wrong-answer");
+   fb.innerHTML='<span class="error">✗ Incorrecto.</span> Recuerda que fragmentación de ADN y condensación nuclear también pueden observarse en piroptosis.';
+ }
+}
+
+renderPieces();
+</script>
+</body>
+</html>
+"""
+    components.html(html, height=1600, scrolling=True)
