@@ -7,7 +7,7 @@ st.caption("Puzzle molecular interactivo · Apoptosis, piroptosis y autofagia")
 
 nivel = st.radio(
     "Selecciona el nivel",
-    ["Nivel 1 · Vía extrínseca", "Nivel 2 · Vía intrínseca", "Nivel 3 · Conexión BID–tBID", "Nivel 4 · Piroptosis", "Nivel 5 · Autofagia"],
+    ["Nivel 1 · Vía extrínseca", "Nivel 2 · Vía intrínseca", "Nivel 3 · Conexión BID–tBID", "Nivel 4 · Piroptosis", "Nivel 5 · Autofagia", "Nivel 6 · Compara las respuestas celulares"],
     horizontal=True,
 )
 
@@ -1078,4 +1078,92 @@ render();
 </script></body></html>
 """
     components.html(html, height=1800, scrolling=True)
+
+elif nivel == "Nivel 6 · Compara las respuestas celulares":
+    html = r"""
+<!DOCTYPE html><html lang="es"><head><meta charset="UTF-8">
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial;background:#f6f8fb;color:#17212b}.wrap{padding:16px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:12px}.title{font-size:24px;font-weight:800}
+.score{background:#fff;border:1px solid #ddd;border-radius:12px;padding:10px 14px;font-weight:800}
+.instructions{background:#f3f0ff;border-left:5px solid #7950f2;padding:12px 14px;border-radius:12px;margin:14px 0}
+.layout{display:grid;grid-template-columns:300px 1fr;gap:16px}.panel{background:#fff;border:1px solid #d9dee5;border-radius:16px;padding:16px}
+.piece{border:2px solid #7950f2;background:#f3f0ff;border-radius:12px;padding:9px;margin:7px 0;font-weight:750;text-align:center;cursor:grab}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}.col{border:1px solid #d5dce3;border-radius:16px;padding:12px;min-height:540px}
+.col h3{text-align:center;margin-top:0}.apop{background:#eef6ff}.pyro{background:#fff4e6}.onco{background:#fff0f3}.auto{background:#eefbf5}
+.slot{min-height:64px;border:2px dashed #98a5b3;border-radius:12px;background:#ffffffd9;display:flex;align-items:center;justify-content:center;text-align:center;padding:8px;margin:8px 0;font-weight:700}
+.correct{border:2px solid #2f9e44!important;background:#e9f8ec!important}.wrong{border:2px solid #d9485f!important;background:#fff0f2!important}
+.feedback,.question,.summary{margin-top:14px;padding:14px;border-radius:12px;border:1px solid #d9dee5;background:#fff}
+.success{color:#237a35;font-weight:800}.error{color:#c92a2a;font-weight:800}.hint{color:#4d5964}
+button{border:0;border-radius:10px;padding:10px 14px;font-weight:800;cursor:pointer;margin-top:10px;margin-right:8px}.primary{background:#263b5e;color:#fff}.secondary{background:#6c757d;color:#fff}
+.option{display:block;width:100%;text-align:left;background:#f3f6f9;color:#17212b}.good{background:#e9f8ec!important}.bad{background:#fff0f2!important}
+@media(max-width:1100px){.layout{grid-template-columns:1fr}.grid{grid-template-columns:1fr 1fr}}@media(max-width:700px){.grid{grid-template-columns:1fr}}
+</style></head><body><div class="wrap">
+<div class="top"><div class="title">Nivel 6 · ¿Qué respuesta celular estoy observando?</div><div class="score">Puntaje: <span id="score">0</span>/1600</div></div>
+<div class="instructions"><b>Misión integradora:</b> arrastra cada característica al proceso correcto. Algunas características pueden parecer similares: usa el mecanismo, la morfología y el carácter inflamatorio para decidir.</div>
+<div class="layout">
+<div class="panel"><h3>🧩 Características</h3><div id="piecebox"></div></div>
+<div class="panel">
+<div class="grid">
+<div class="col apop"><h3>🔵 Apoptosis</h3>
+<div class="slot" data-answer="Caspasa-3 / -7">Caspasas características</div>
+<div class="slot" data-answer="Contracción celular">Cambio de volumen</div>
+<div class="slot" data-answer="Cuerpos apoptóticos">Destino morfológico</div>
+<div class="slot" data-answer="Poca inflamación">Respuesta inflamatoria</div>
+</div>
+<div class="col pyro"><h3>🟠 Piroptosis</h3>
+<div class="slot" data-answer="Caspasa-1">Caspasa característica</div>
+<div class="slot" data-answer="Citocinas maduras">Mediadores</div>
+<div class="slot" data-answer="Ruptura de membrana">Membrana</div>
+<div class="slot" data-answer="Alta inflamación">Respuesta inflamatoria</div>
+</div>
+<div class="col onco"><h3>🔴 Oncosis</h3>
+<div class="slot" data-answer="Independiente de caspasas">Dependencia de caspasas</div>
+<div class="slot" data-answer="Tumefacción celular y de organelos">Morfología</div>
+<div class="slot" data-answer="Aumento de permeabilidad">Membrana</div>
+<div class="slot" data-answer="Favorece diseminación">Consecuencia descrita</div>
+</div>
+<div class="col auto"><h3>🟢 Autofagia</h3>
+<div class="slot" data-answer="ATG8 / LC3">Marcador del esquema</div>
+<div class="slot" data-answer="Autofagosoma">Estructura</div>
+<div class="slot" data-answer="Autofagolisosoma">Compartimento final</div>
+<div class="slot" data-answer="Poca inflamación">Respuesta inflamatoria</div>
+</div>
+</div>
+<div class="feedback" id="feedback"><b>Retroalimentación</b><br><span class="hint">No te guíes solo por fragmentación del ADN: el material advierte que puede aparecer en más de una modalidad.</span></div>
+<button class="primary" onclick="checkLevel()">Comprobar nivel</button><button class="secondary" onclick="location.reload()">Reiniciar</button>
+<div class="question" id="challenge" style="display:none"><b>Desafío crítico</b><br>Una célula infectada presenta fragmentación del ADN y condensación nuclear. ¿Es suficiente para concluir que está en apoptosis?
+<button class="option" onclick="answer(this,'no')">No. Deben evaluarse eventos más específicos, como liberación de citocromo c o activación de caspasas apoptóticas.</button>
+<button class="option" onclick="answer(this,'si')">Sí. Fragmentación de ADN demuestra apoptosis.</button>
+<div id="cf"></div></div>
+<div class="summary"><b>Idea clave:</b> el artículo compara cuatro respuestas: apoptosis, piroptosis, oncosis y autofagia. Algunas comparten características. Apoptosis y autofagia se presentan como no inflamatorias, mientras piroptosis y oncosis son altamente inflamatorias por liberación de citocinas o contenido citoplasmático.</div>
+</div></div></div>
+<script>
+const pieces=[
+{name:"Caspasa-3 / -7",info:"El esquema asocia las caspasas ejecutoras 3 y 7 con apoptosis."},
+{name:"Contracción celular",info:"La contracción celular es una característica morfológica de apoptosis."},
+{name:"Cuerpos apoptóticos",info:"Durante apoptosis se forman cuerpos apoptóticos que pueden ser eliminados por fagocitos."},
+{name:"Poca inflamación",info:"En el esquema, apoptosis y autofagia no inducen la inflamación intensa característica de piroptosis/oncosis.",multi:true},
+{name:"Caspasa-1",info:"El artículo vincula piroptosis con activación de caspasa-1."},
+{name:"Citocinas maduras",info:"Piroptosis se asocia con maduración/liberación de citocinas inflamatorias."},
+{name:"Ruptura de membrana",info:"La ruptura de membrana contribuye a la naturaleza inflamatoria de piroptosis."},
+{name:"Alta inflamación",info:"Piroptosis es altamente inflamatoria por liberación de citocinas y contenido celular."},
+{name:"Independiente de caspasas",info:"El artículo define oncosis como una muerte independiente de caspasas."},
+{name:"Tumefacción celular y de organelos",info:"La oncosis presenta swelling celular y de organelos."},
+{name:"Aumento de permeabilidad",info:"La oncosis se caracteriza por aumento de permeabilidad y ruptura de membrana."},
+{name:"Favorece diseminación",info:"La figura señala que, en general, la oncosis favorece la diseminación del patógeno."},
+{name:"ATG8 / LC3",info:"ATG8/LC3 aparece asociado a las membranas autofágicas en el esquema."},
+{name:"Autofagosoma",info:"La autofagia secuestra material en un autofagosoma de doble membrana."},
+{name:"Autofagolisosoma",info:"El autofagosoma se fusiona con el compartimento lisosomal para degradar su contenido."}
+];
+let score=0,placed=0;
+function shuffle(a){return [...a].sort(()=>Math.random()-0.5)}
+function render(){const b=document.getElementById("piecebox");let arr=[...pieces,{name:"Poca inflamación",info:"En el esquema, apoptosis y autofagia no inducen inflamación intensa."}];shuffle(arr).forEach((p,i)=>{const e=document.createElement("div");e.className="piece";e.draggable=true;e.textContent=p.name;e.dataset.id=i;e.dataset.name=p.name;e.addEventListener("dragstart",x=>{x.dataTransfer.setData("text/plain",JSON.stringify({name:p.name,id:i}))});b.appendChild(e)})}
+document.querySelectorAll(".slot").forEach(s=>{s.addEventListener("dragover",e=>e.preventDefault());s.addEventListener("drop",e=>{e.preventDefault();let d;try{d=JSON.parse(e.dataTransfer.getData("text/plain"))}catch{return}const p=pieces.find(x=>x.name===d.name);if(s.dataset.answer===d.name&&!s.classList.contains("correct")){score+=100;placed++;s.classList.add("correct");s.innerHTML="<b>"+d.name+"</b>";const o=[...document.querySelectorAll(".piece")].find(x=>x.dataset.id==d.id);if(o)o.remove();document.getElementById("score").textContent=score;document.getElementById("feedback").innerHTML='<span class="success">✓ Correcto.</span><br>'+(p?p.info:"Clasificación correcta.")}else{s.classList.add("wrong");setTimeout(()=>s.classList.remove("wrong"),650);document.getElementById("feedback").innerHTML='<span class="error">✗ Incorrecto.</span><br><span class="hint">Compara caspasas, membrana, morfología e inflamación.</span>'}})})
+function checkLevel(){if(placed===16){document.getElementById("feedback").innerHTML='<span class="success">🏆 Nivel completado.</span><br>Has diferenciado las cuatro respuestas celulares del esquema.';document.getElementById("challenge").style.display="block"}else document.getElementById("feedback").innerHTML='<span class="hint">Aún faltan '+(16-placed)+' características.</span>'}
+function answer(b,a){if(a==="no"){b.classList.add("good");document.getElementById("cf").innerHTML='<span class="success">✓ Correcto.</span> El artículo advierte que TUNEL/fragmentación de ADN no es específico de apoptosis.'}else{b.classList.add("bad");document.getElementById("cf").innerHTML='<span class="error">✗ Incorrecto.</span> Otras formas de muerte también pueden presentar fragmentación de ADN.'}}
+render();
+</script></body></html>
+"""
+    components.html(html, height=1450, scrolling=True)
 
